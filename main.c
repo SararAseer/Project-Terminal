@@ -4,23 +4,38 @@
 #include <unistd.h>
 #include <string.h>
 
-char** parsebois(char *line){
-  char ** args = calloc(1,25);
+char** pl(char *line){
+  char ** args = calloc(sizeof(line), sizeof(line));
   char * s = strdup(line);
   int i = 0;
-  while(args[i] = strsep(&s, " "))
-    {
-      i++;
-    }
+  while(args[i] = strsep(&s, " ")){
+    i++;
+  }
   return args;
 }
 
-int main(char *argv[],char argc){
+char**** execute(char *line){
+ 
+
+}
+
+int main(){
   char input[500];
   printf("Start \n");
-  scanf("%s", input);
-  char ** commands=parsebois(input);
-  printf("%s \n", commands[0]);
+  fgets(input, 500,stdin);
+  for(int i=0; i < strlen(input); i++){
+    if(input[i]=='\n'){
+      input[i]='\0';
+    }
+  }
+  int stat;
+  char ** args=pl(input);
+  int i = 0;
+  if(fork()){
+      execvp(args[0],args);
+      return 1;
+  }
+  
   printf("Finish \n");
   return 0;
 }
