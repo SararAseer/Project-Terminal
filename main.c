@@ -15,28 +15,39 @@ char** pl(char *line){
 }
 
 char**** execute(char *line){
- 
 
+
+}
+
+int exec(char * entry){
+  char ** args=pl(entry);
+  execvp(args[0],args);
+  exit(0);
 }
 
 int main(){
-  char input[500];
   printf("Start \n");
-  fgets(input, 500,stdin);
-  for(int i=0; i < strlen(input); i++){
-    if(input[i]=='\n'){
-      input[i]='\0';
+  char input[100];
+  int c = 1;
+  while(c){
+    fgets(input, 100, stdin);
+
+    for(int i=0; i < strlen(input); i++){
+      if(input[i]=='\n'){
+        input[i]='\0';
+      }
+    }
+
+    if(strcmp(input, "exit") == 0){
+      break;
+    }
+
+    int f = fork();
+    if(!f){
+      exec(input);
     }
   }
-  int stat;
-  char ** args=pl(input);
-  int i = 0;
-  if(fork()){
-      execvp(args[0],args);
-      return 1;
-  }
-  
+
   printf("Finish \n");
   return 0;
 }
-
