@@ -1,0 +1,10 @@
+sizeof args: 8
+.
+..
+a.out
+foo
+.git
+.gitignore
+main.c
+main.c~
+README.md

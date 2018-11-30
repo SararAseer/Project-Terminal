@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <string.h>
 
 char** pl(char *line, char* delim){
@@ -25,6 +26,14 @@ void exec(char * entry){
   char ** args=pl(entry, " ");
   execvp(args[0],args);
   exit(0);
+}
+
+int put_in(char* entry, char* file){
+  int backup = dup(1);
+  int file_desc = open(file ,O_WRONLY | O_CREAT, 0700);
+  dup2(file_desc, 1);
+  exec(entry);
+  dup2(backup, file_desc);
 }
 
 char * remove_n(char * entry){
@@ -54,7 +63,8 @@ int main(){
     int f = fork();
     wait(&status);
     if(!f){
-      exec(input);
+      // exec(input);
+      put_in("ls -a", "foo");
     }
 
     // char ** terms = calloc(7, sizeof(input));
