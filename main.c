@@ -13,7 +13,6 @@ char** pl(char *line, char* delim){
   while(args[i] = strsep(&s, delim)){
     i++;
   }
-  printf("sizeof args: %ld\n", sizeof(args));
   return args;
 }
 
@@ -22,18 +21,23 @@ char**** execute(char *line){
 
 }
 
-void exec(char * entry){
-  char ** args=pl(entry, " ");
-  execvp(args[0],args);
-  exit(0);
+int exec(char * entry){
+  int status = 0;
+
+  int f = fork();
+  wait(&status);
+  if(!f){
+    char ** args=pl(entry, " ");
+    execvp(args[0],args);
+  }
 }
 
-int put_in(char* entry, char* file){
+int new_out(char* entry, char* file){
   int backup = dup(1);
-  int file_desc = open(file ,O_WRONLY | O_CREAT, 0700);
+  int file_desc = open(file ,O_WRONLY | O_CREAT | O_TRUNC, 0700);
   dup2(file_desc, 1);
   exec(entry);
-  dup2(backup, file_desc);
+  dup2(backup, 1);
 }
 
 char * remove_n(char * entry){
@@ -50,7 +54,6 @@ int main(){
   char input[100];
   int c = 1;
   while(c){
-    int status = 0;
     printf("SMASH_SHELL#:");
     fgets(input, 100, stdin);
 
@@ -60,12 +63,8 @@ int main(){
       break;
     }
 
-    int f = fork();
-    wait(&status);
-    if(!f){
-      // exec(input);
-      put_in("ls -a", "foo");
-    }
+    new_out("echo hello world", "foo");
+    exec(input);
 
     // char ** terms = calloc(7, sizeof(input));
     // char * s = strdup(input);
