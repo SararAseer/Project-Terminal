@@ -40,6 +40,14 @@ int new_out(char* entry, char* file){
   dup2(backup, 1);
 }
 
+int new_in(char* entry, char* file){
+  int backup = dup(0);
+  int file_desc = open(file ,O_RDONLY, 0700);
+  dup2(file_desc, 0);
+  exec(entry);
+  dup2(backup, 0);
+}
+
 char * remove_n(char * entry){
   for(int i=0; i < strlen(entry); i++){
     if(entry[i] == '\n'){
@@ -64,6 +72,7 @@ int main(){
     }
 
     new_out("echo hello world", "foo");
+    new_in("wc", "foo");
     exec(input);
 
     // char ** terms = calloc(7, sizeof(input));
