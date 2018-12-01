@@ -71,9 +71,13 @@ int main(){
       break;
     }
 
-    new_out("echo hello world", "foo");
-    new_in("wc", "foo");
-    exec(input);
+    char ** args=pl(input, " ");
+    if(strcmp(args[0], "cd") == 0){
+      chdir(args[1]);
+    }
+    else{
+      exec(input);
+    }
 
     // char ** terms = calloc(7, sizeof(input));
     // char * s = strdup(input);
