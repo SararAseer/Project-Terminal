@@ -112,8 +112,10 @@ void check(char **line){
 
 int main(){
   printf("Start \n");
-  char **s1=pl(s, ";");
-  remove_n(s1);
+  char input[500];
+  fgets(input, 500,stdin);
+  remove_n(input);
+  char **s1=pl(input, ";");
   check(s1);
   int i=0;
   int x=0; 
@@ -127,11 +129,12 @@ int main(){
     }
     i++;
   }
+  i=0;
   while(s1[i]){
     if(s1[i]!="skip"){
-      char **args=pl(s1[i], " ");
-      execvp(args[0], args);
+      exec(s1[i]);
     }
+    i++;
   }
   return 0;
 }
