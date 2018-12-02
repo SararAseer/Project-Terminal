@@ -68,7 +68,7 @@ int main(){
     strcpy(input, remove_n(input));
 
     if(strcmp(input, "exit") == 0){
-      break;
+      exit(0);
     }
 
     char ** args=pl(input, " ");
