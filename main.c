@@ -16,10 +16,6 @@ char** pl(char *line, char* delim){
   return args;
 }
 
-char**** execute(char *line){
-
-
-}
 
 
 void pip(char *first, char *second){
@@ -52,7 +48,6 @@ void pip(char *first, char *second){
         close(p[1]);
         wait(0);
         wait(0);
-
 }
 
 int exec(char * entry){
@@ -91,10 +86,52 @@ char * remove_n(char * entry){
   return entry;
 }
 
+void check(char **line){
+  int i=0;
+  while(line[i]){
+    int x=0;
+    while(line[i][x]){
+      if(line[i][x]=='<'){
+	char** args=pl(line[i],"<");
+	new_in(args[0],args[1]);
+      }
+      else if(line[i][x]=='>'){
+	char** args=pl(line[i],">");
+	new_out(args[0],args[1]);
+      }
+      else if(line[i][x]=='|'){
+	char** args=pl(line[i], "|");
+	pip(args[0],args[1]);
+      }
+      x++;
+    }
+    i++;
+  }
+}
+ 
+
 int main(){
   printf("Start \n");
-  char *entry="ls -l";
-  char *back="wc -l";  
-  pip(entry, back);
+  char **s1=pl(s, ";");
+  remove_n(s1);
+  check(s1);
+  int i=0;
+  int x=0; 
+  while(s1[i]){
+    while(s1[i][x]){
+      if(s1[i][x]=='<'||s1[i][x]=='>'||s1[i][x]=='|'){
+	s1[i]="skip";
+	break;
+      }
+      x++;
+    }
+    i++;
+  }
+  while(s1[i]){
+    if(s1[i]!="skip"){
+      char **args=pl(s1[i], " ");
+      execvp(args[0], args);
+    }
+  }
   return 0;
 }
