@@ -29,6 +29,7 @@ int exec(char * entry){
   if(!f){
     char ** args=pl(entry, " ");
     execvp(args[0],args);
+    exit(0);
   }
 }
 
