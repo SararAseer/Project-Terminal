@@ -21,9 +21,42 @@ char**** execute(char *line){
 
 }
 
+
+void pip(char *first, char *second){
+ int p[2];
+        if(pipe(p) == -1){
+          printf("Pipe no work, thats so weird");
+          exit(1);
+        }
+
+        if(fork() == 0){
+            close(STDOUT_FILENO); 
+            dup(p[1]);         
+            close(p[0]);       
+            close(p[1]);
+	    char ** args1 =pl(first, " ");
+            execvp(args1[0], args1);
+            exit(1);
+        }
+        if(fork() == 0){
+            close(STDIN_FILENO);   
+            dup(p[0]);
+            close(p[1]);       
+            close(p[0]);
+	    char ** args2 =pl(second, " ");
+            execvp(args2[0], args2);
+            exit(1);
+        }
+
+        close(p[0]);
+        close(p[1]);
+        wait(0);
+        wait(0);
+
+}
+
 int exec(char * entry){
   int status = 0;
-
   int f = fork();
   wait(&status);
   if(!f){
@@ -60,44 +93,8 @@ char * remove_n(char * entry){
 
 int main(){
   printf("Start \n");
-  char input[100];
-  int c = 1;
-  while(c){
-    printf("SMASH_SHELL#:");
-    fgets(input, 100, stdin);
-
-    strcpy(input, remove_n(input));
-
-    if(strcmp(input, "exit") == 0){
-      exit(0);
-    }
-
-    char ** args=pl(input, " ");
-    if(strcmp(args[0], "cd") == 0){
-      chdir(args[1]);
-    }
-    else{
-      exec(input);
-    }
-
-    // char ** terms = calloc(7, sizeof(input));
-    // char * s = strdup(input);
-    // int i = 0;
-    // while(terms[i] = strsep(&s, ";")){
-    //   i++;
-    // }
-    // for(; i >= 0; i--){
-    //   printf("%s\n", terms[i]);
-    //   if(strcmp(terms[i], "exit") == 0){
-    //     exit(0);
-    //   }
-    //   int f = fork();
-    //   wait(&status);
-    //   if(!f){
-    //     exec(terms[i]);
-    //   }
-    // }
-  }
-
+  char *entry="ls -l";
+  char *back="wc -l";  
+  pip(entry, back);
   return 0;
 }
