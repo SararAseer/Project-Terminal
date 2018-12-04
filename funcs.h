@@ -1,9 +1,9 @@
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef FUNCS_H
+#define FUNCS_H
 
 char** pl(char *line, char* delim); //Parses the line base on the delimiter given so that it retuns an char**
 
-void pip(char *first, char *second);
+int pip(char *first, char *second);
 
 int exec(char * entry); //runs a command given a char*
 
