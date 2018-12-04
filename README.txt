@@ -4,7 +4,7 @@ by Derek Chan and Sarar Aseer
 Features:
 	Forks and executes commands!
 	Parses multiple commands on one line!
-  Pipes!
+  	Pipes!
 	Redirects using >, <!
 
 Attempted:
@@ -51,15 +51,15 @@ funcs.c
 	====================*/
 
   /*======== int pip() ==========
-	Inputs:  
-	Returns:
+	Inputs:  char * first
+	Returns:Uses the output in by running the commands in the first string, into the second string, and 		outputs the result
 
 
 	====================*/
 
   /*======== int check() ==========
-	Inputs:
-	Returns:
+	Inputs: char **line
+	Returns: Runs all commands with execvp that includes redirections or pipes
 
 
 	====================*/
